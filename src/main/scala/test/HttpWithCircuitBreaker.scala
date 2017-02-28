@@ -27,7 +27,9 @@ object HttpWithCircuitBreaker extends App {
       .onHalfOpen(println("circuit breaker half-open"))
 
   while (true) {
-    val futureResponse: Future[HttpResponse] = Http().singleRequest(HttpRequest(uri = "https://www.random.org/integers/?num=1&min=1&max=6&col=1&base=10&format=plain&rnd=new"))
+    //val futureResponse: Future[HttpResponse] = Http().singleRequest(HttpRequest(uri = "https://www.random.org/integers/?num=1&min=1&max=6&col=1&base=10&format=plain&rnd=new"))
+    //use def not val Stefano Bonetti
+    def futureResponse: Future[HttpResponse] = Http().singleRequest(HttpRequest(uri = "https://www.random.org/integers/?num=1&min=1&max=6&col=1&base=10&format=plain&rnd=new"))
     breaker.withCircuitBreaker(futureResponse).map(resp => resp.status match {
       case Success(_) =>
         resp.entity.discardBytes()
